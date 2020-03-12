@@ -21,6 +21,7 @@
     methods:{
       activeClick(index){
         this.currentIndex=index;
+        this.$emit('tabClick',index);
       }
     },
     props:{
