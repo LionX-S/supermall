@@ -3,11 +3,16 @@
     <nav-bar class="home-nav">
       <div slot="center">购物街</div>
     </nav-bar>
-    <home-swiper :banner="banner"></home-swiper>
-    <recommend-views :recommend="recommend"></recommend-views>
-    <feature-view></feature-view>
-    <tab-control :titles="titles" class="tab-control" @tabClick="tabClick"></tab-control>
-    <goods-list :GoodsList="goods[currentType].list"></goods-list>
+    <scroll class="content" ref="scroll" :probe-type="3" @scrollSpace="scrollSpace">
+      <home-swiper :banner="banner"></home-swiper>
+      <recommend-views :recommend="recommend"></recommend-views>
+      <feature-view></feature-view>
+      <tab-control :titles="titles"
+                   class="tab-control"
+                   @tabClick="tabClick"></tab-control>
+      <goods-list :GoodsList="goods[currentType].list"></goods-list>
+    </scroll>
+    <back-top @click.native="backTop" v-show="isShow"></back-top>
   </div>
 </template>
 
@@ -15,6 +20,8 @@
   import navBar from "components/common/navbar/navBar";
   import TabControl from "components/content/tabControl/TabControl";
   import GoodsList from "components/content/goods/GoodsList";
+  import Scroll from "components/common/scroll/Scroll";
+  import BackTop from "components/content/backtop/BackTop";
 
   import {getHomeMultidata, getHomeGoods} from "network/home";
 
@@ -28,6 +35,8 @@
       navBar,
       TabControl,
       GoodsList,
+      Scroll,
+      BackTop,
       homeSwiper,
       RecommendViews,
       FeatureView
@@ -43,7 +52,8 @@
           'new': {page: 0, list: []},
           'sell': {page: 0, list: []}
         },
-        currentType: 'pop'
+        currentType: 'pop',
+        isShow:false,
       }
     },
     methods: {
@@ -75,6 +85,12 @@
             this.currentType = 'sell';
             break;
         }
+      },
+      backTop(){
+        this.$refs.scroll.BackToTop(0,0,500);
+      },
+      scrollSpace(position){
+        this.isShow=-(position.y)>1000;
       }
     },
     created() {
@@ -99,6 +115,8 @@
 
   #home {
     padding-top: 44px;
+    position: relative;
+    height: 100vh;
   }
 
   .tab-control {
@@ -106,5 +124,13 @@
     position: sticky;
     top: 44px;
     z-index: 9;
+  }
+
+  .content {
+    position: absolute;
+    top: 44px;
+    bottom: 49px;
+    left: 0;
+    right: 0;
   }
 </style>
