@@ -3,7 +3,11 @@
     <nav-bar class="home-nav">
       <div slot="center">购物街</div>
     </nav-bar>
-    <scroll class="content" ref="scroll" :probe-type="3" @scrollSpace="scrollSpace">
+    <scroll class="content" ref="scroll"
+            :probe-type="3"
+            @scrollSpace="scrollSpace"
+            :pull-up-load="true"
+            @pullingUp="loadMore">
       <home-swiper :banner="banner"></home-swiper>
       <recommend-views :recommend="recommend"></recommend-views>
       <feature-view></feature-view>
@@ -71,6 +75,8 @@
           //push(...param) 三个点表示将参数依次拿出并push到新数组中
           this.goods[type].list.push(...res.data.list);
           this.goods[type].page += 1;
+          //调用finishPullUp方法，一遍继续调用上拉加载更多方法
+          this.$refs.scroll.finishPullUp();
         })
       },
       tabClick(index) {
@@ -91,6 +97,10 @@
       },
       scrollSpace(position){
         this.isShow=-(position.y)>1000;
+      },
+      loadMore(){
+        console.log('加载更多');
+        this.getCHomeGoods(this.currentType)
       }
     },
     created() {
