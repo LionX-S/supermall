@@ -11,6 +11,7 @@ const home = ()=>import("../views/home/home");
 const list =()=>import('../views/list/list');
 const mine =()=>import('../views/mine/mine');
 const shopcar =()=>import('../views/shopcar/shopcar');
+const detail=()=>import('../views/detail/Detail');
 const routes = [
   {
     path:'',
@@ -42,6 +43,13 @@ const routes = [
     component:mine,
     meta:{
       title:'我的'
+    }
+  },
+  {
+    path:'/detail/:id',
+    component:detail,
+    meta:{
+      title:'商品详情'
     }
   },
 ];

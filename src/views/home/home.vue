@@ -3,17 +3,20 @@
     <nav-bar class="home-nav">
       <div slot="center">购物街</div>
     </nav-bar>
+    <tab-control :titles="titles"
+                 @tabClick="tabClick"
+                 ref="tabcontrol1"
+                 v-show="isFixed" class="tab-control"></tab-control>
     <scroll class="content" ref="scroll"
             :probe-type="3"
             @scrollSpace="scrollSpace"
             :pull-up-load="true"
             @pullingUp="loadMore">
-      <home-swiper :banner="banner"></home-swiper>
+      <home-swiper :banner="banner" @imgLoad="imgLoad"></home-swiper>
       <recommend-views :recommend="recommend"></recommend-views>
       <feature-view></feature-view>
       <tab-control :titles="titles"
-                   class="tab-control"
-                   @tabClick="tabClick"></tab-control>
+                   @tabClick="tabClick" ref="tabcontrol2" ></tab-control>
       <goods-list :GoodsList="goods[currentType].list"></goods-list>
     </scroll>
     <back-top @click.native="backTop" v-show="isShow"></back-top>
@@ -58,6 +61,9 @@
         },
         currentType: 'pop',
         isShow:false,
+        tabControlOffsetTop:0,
+        isFixed:false,
+        scrollY:0
       }
     },
     methods: {
@@ -72,10 +78,10 @@
         const page = this.goods[type].page + 1;
         getHomeGoods(type, page).then(res => {
           // console.log(res);
-          //push(...param) 三个点表示将参数依次拿出并push到新数组中
+          //push(...param) 三个点表示可以是多个或者没有参数
           this.goods[type].list.push(...res.data.list);
           this.goods[type].page += 1;
-          //调用finishPullUp方法，一遍继续调用上拉加载更多方法
+          //调用finishPullUp方法，以便继续调用上拉加载更多方法
           this.$refs.scroll.finishPullUp();
         })
       },
@@ -91,16 +97,33 @@
             this.currentType = 'sell';
             break;
         }
+        this.$refs.tabcontrol1.currentIndex=index;
+        this.$refs.tabcontrol2.currentIndex=index;
       },
       backTop(){
         this.$refs.scroll.BackToTop(0,0,500);
       },
       scrollSpace(position){
         this.isShow=-(position.y)>1000;
+        this.isFixed=-(position.y)>this.tabControlOffsetTop;
       },
       loadMore(){
-        console.log('加载更多');
+        // console.log('加载更多');
         this.getCHomeGoods(this.currentType)
+      },
+      //防抖函数 避免过多请求refresh函数
+      debounce(func,delay){
+        let time=null;
+        return function (...args) {
+          if (time) clearTimeout(time);
+          time=setTimeout(()=>{
+            func.apply(this,args);
+          },delay)
+        }
+      },
+      //
+      imgLoad(){
+        this.tabControlOffsetTop=this.$refs.tabcontrol2.$el.offsetTop;
       }
     },
     created() {
@@ -108,6 +131,20 @@
       this.getCHomeGoods('pop');
       this.getCHomeGoods('new');
       this.getCHomeGoods('sell');
+    },
+    //切换分类后 返回home还是在原来位置
+    activated() {
+      this.$refs.scroll.refresh();
+      this.$refs.scroll.BackToTop(0,this.scrollY,0);
+    },
+    deactivated() {
+      this.scrollY=this.$refs.scroll.scroll.y;
+    },
+    mounted() {
+      const refresh=this.debounce(this.$refs.scroll.refresh,50);
+      this.$bus.$on('loadFinish',()=>{
+        refresh();
+      });
     }
   }
 </script>
@@ -116,23 +153,16 @@
   .home-nav {
     background-color: #FF0036;
     color: #ffffff;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 9;
   }
 
   #home {
-    padding-top: 44px;
-    position: relative;
+    /*padding-top: 44px;*/
+    /*position: relative;*/
     height: 100vh;
   }
 
   .tab-control {
-    background-color: #fff;
-    position: sticky;
-    top: 44px;
+    position: relative;
     z-index: 9;
   }
 

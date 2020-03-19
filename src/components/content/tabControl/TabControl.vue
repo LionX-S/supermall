@@ -39,6 +39,7 @@
   .tab-control{
     display: flex;
     font-size: 15px;
+    background-color: #fff;
   }
   .tab-control-item{
     flex: 1;

@@ -1,6 +1,6 @@
 <template>
-  <div class="goods-list-item">
-    <img :src="GoodsListItem.show.img" alt="">
+  <div class="goods-list-item" @click="toDetail">
+    <img :src="GoodsListItem.show.img" alt="" @load="loadFinish">
     <div class="info">
       <p>{{GoodsListItem.title}}</p>
       <span class="price">￥{{GoodsListItem.price}}</span>
@@ -18,6 +18,15 @@
         default(){
           return {}
         }
+      }
+    },
+    methods:{
+      //事件总线
+      loadFinish(){
+        this.$bus.$emit('loadFinish');
+      },
+      toDetail(){
+        this.$router.push('/detail/'+this.GoodsListItem.iid);
       }
     }
   }

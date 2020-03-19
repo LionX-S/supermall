@@ -30,6 +30,7 @@
     text-align: center;
     font-size: 12px;
     margin: 15px 0 15px;
+    background-color: #fff;
   }
   .recommend-item{
     flex:1;
