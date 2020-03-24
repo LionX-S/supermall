@@ -31,6 +31,7 @@
   import BackTop from "components/content/backtop/BackTop";
 
   import {getHomeMultidata, getHomeGoods} from "network/home";
+  import {itemListMixin} from "common/mixin";
 
   import homeSwiper from "./homechildren/homeSwiper";
   import RecommendViews from "./homechildren/RecommendViews";
@@ -66,6 +67,7 @@
         scrollY:0
       }
     },
+    mixins:[itemListMixin],
     methods: {
       getCHomeMultidata() {
         getHomeMultidata().then(res => {
@@ -111,16 +113,7 @@
         // console.log('加载更多');
         this.getCHomeGoods(this.currentType)
       },
-      //防抖函数 避免过多请求refresh函数
-      debounce(func,delay){
-        let time=null;
-        return function (...args) {
-          if (time) clearTimeout(time);
-          time=setTimeout(()=>{
-            func.apply(this,args);
-          },delay)
-        }
-      },
+
       //
       imgLoad(){
         this.tabControlOffsetTop=this.$refs.tabcontrol2.$el.offsetTop;
@@ -140,12 +133,12 @@
     deactivated() {
       this.scrollY=this.$refs.scroll.scroll.y;
     },
-    mounted() {
-      const refresh=this.debounce(this.$refs.scroll.refresh,50);
-      this.$bus.$on('loadFinish',()=>{
-        refresh();
-      });
-    }
+    // mounted() {
+    //   const refresh=this.debounce(this.$refs.scroll.refresh,50);
+    //   this.$bus.$on('loadFinish',()=>{
+    //     refresh();
+    //   });
+    // }
   }
 </script>
 

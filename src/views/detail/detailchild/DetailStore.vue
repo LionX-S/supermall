@@ -17,9 +17,17 @@
       </div>
       <div class="Miaoshu">
         <ul>
-          <li v-for="item in storeInfo.score">{{item.name}}{{item.score}}</li>
+          <li v-for="item in storeInfo.score">
+            <span>{{item.name}}</span>
+            <span>{{item.score}}</span>
+            <span v-if="item.score>4.5" style="background-color:red;color: #ffffff">高</span>
+            <span v-else style="background-color:green;color: #ffffff">低</span>
+          </li>
         </ul>
       </div>
+    </div>
+    <div class="intostor">
+      <button>进入店铺</button>
     </div>
   </div>
 </template>
@@ -44,7 +52,8 @@
     position: relative;
     height: 100px;
   }
-  .storename{
+
+  .storename {
     display: inline-block;
     height: 80px;
     line-height: 80px;
@@ -53,6 +62,7 @@
     top: 50%;
     margin-top: -40px;
   }
+
   .logoimg {
     width: 80px;
     height: 80px;
@@ -63,22 +73,40 @@
     margin-left: 15px;
     border: 1px solid #cccccc;
   }
-  #info-bott{
+
+  #info-bott {
     display: flex;
 
   }
-  .GoodsNum,.Miaoshu{
+
+  .GoodsNum, .Miaoshu {
     flex: 1;
   }
-  .GoodsNum{
+
+  .GoodsNum {
     display: flex;
     text-align: center;
     padding: 10px;
   }
-  .zong,.quanbu{
+
+  .zong, .quanbu {
     flex: 1;
   }
-  .quanbu{
+
+  .quanbu {
     border-right: 1px solid #cccccc;
+  }
+
+  .intostor{
+    height: 60px;
+    padding: 10px;
+    text-align: center;
+  }
+  .intostor>button{
+    border: none;
+    background-color: #cccccc;
+    height: 30px;
+    width: 80px;
+    border-radius: 5px;
   }
 </style>

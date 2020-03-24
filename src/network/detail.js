@@ -7,7 +7,7 @@ export function getDetail(id) {
     }
   })
 }
-
+//封装商品信息
 export class GoodInfo {
   constructor(itemInfo,columns,services) {
     this.title=itemInfo.title;
@@ -20,7 +20,7 @@ export class GoodInfo {
     this.realPrice=itemInfo.lowNowPrice;
   }
 }
-
+//封装商铺信息
 export class StroeInfo {
   constructor(shopInfo) {
     this.logo=shopInfo.shopLogo;
@@ -30,4 +30,11 @@ export class StroeInfo {
     this.score=shopInfo.score;
     this.goodCount=shopInfo.cGoods;
   }
+}
+
+//获取推荐列表信息
+export function getRecommend() {
+ return request({
+   url:'/recommend',
+ })
 }
