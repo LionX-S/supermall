@@ -25,7 +25,7 @@ function padLeftZero (str) {
 
 
 //防抖函数 避免过多请求refresh函数
-export function debounce(func,delay){
+export function debounce(func,delay=100){
   let time=null;
   return function (...args) {
     if (time) clearTimeout(time);

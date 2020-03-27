@@ -31,7 +31,8 @@
         this.$bus.$emit('loadFinish');
       },
       toDetail(){
-        this.$router.push('/detail/'+this.GoodsListItem.iid);
+        let iid=this.GoodsListItem.iid;
+        this.$router.push({path: '/detail', query: {iid}});
       }
     }
   }

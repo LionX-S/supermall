@@ -26,7 +26,8 @@
     },
     methods: {
       itemClick(index) {
-        this.currentIndex = index
+        this.currentIndex = index;
+        this.$emit('detailnavcli',index);
       },
       backClick() {
         this.$router.back()

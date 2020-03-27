@@ -49,8 +49,10 @@
   }
   td{
     flex: 1;
-    text-align: center;
+    text-align: left;
+    overflow: hidden;
     color: var(--color-high-text);
+    font-size: 12px;
   }
   .short{
     flex: 1;

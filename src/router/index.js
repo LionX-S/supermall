@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 //解决多次点击路由报错的问题
-const originalPush = VueRouter.prototype.push
+const originalPush = VueRouter.prototype.push;
 VueRouter.prototype.push = function push(location) {
   return originalPush.call(this, location).catch(err => err)
 };
@@ -10,7 +10,7 @@ Vue.use(VueRouter);
 const home = ()=>import("../views/home/home");
 const list =()=>import('../views/list/list');
 const mine =()=>import('../views/mine/mine');
-const shopcar =()=>import('../views/shopcar/shopcar');
+const shopcar =()=>import('../views/shopcar/ShopCar');
 const detail=()=>import('../views/detail/Detail');
 const routes = [
   {
@@ -46,7 +46,7 @@ const routes = [
     }
   },
   {
-    path:'/detail/:id',
+    path:'/detail',
     component:detail,
     meta:{
       title:'商品详情'
